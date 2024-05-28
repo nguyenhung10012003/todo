@@ -1,24 +1,27 @@
-"use client"
+"use client";
 
-import { Table } from "@tanstack/react-table"
+import { Table } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
+import { DataTableViewOptions } from "@/components/DataTableViewOptions";
 import { priorities } from "@/utils/priorities";
 import { statuses } from "@/utils/statuses";
-import { DataTableFacetedFilter } from "./DataTableFacedFilter"
-import {XMarkIcon} from "@heroicons/react/20/solid";
-import {DataTableViewOptions} from "@/components/DataTableViewOptions";
+import { XMarkIcon } from "@heroicons/react/20/solid";
+import { DataTableFacetedFilter } from "./DataTableFacedFilter";
+import TaskModal from "./TaskModal";
+
+import { saveTask } from "@/utils/task";
 
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
 }
 
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0
+  const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <div className="flex items-center justify-between">
@@ -57,6 +60,16 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <DataTableViewOptions table={table} />
+      <TaskModal
+        openBtn={
+          <Button size="sm" className="h-8 ml-3">
+            New task
+          </Button>
+        }
+        handleSave={saveTask}
+        title={"Add a task"}
+        description={"Create a new task here."}
+      />
     </div>
-  )
+  );
 }

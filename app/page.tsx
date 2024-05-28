@@ -1,38 +1,19 @@
-import {promises as fs} from "fs"
-import path from "path"
-import {Metadata} from "next"
+import { Metadata } from "next";
 
-import {columns} from "@/components/Columns"
-import {DataTable} from "@/components/DataTable"
+import { columns } from "@/components/Columns";
+import { DataTable } from "@/components/DataTable";
+import { getTasks } from "@/utils/task";
 
 export const metadata: Metadata = {
   title: "Tasks",
-  description: "A task and issue tracker build using Tanstack Table.",
-}
-
-// Simulate a database read for tasks.
-async function getTasks() {
-  const data = await fs.readFile(
-    path.join(process.cwd(), "utils/tasks.json")
-  )
-
-  return JSON.parse(data.toString()).map((task: any) => {
-    return {
-      id: task.id,
-      title: task.title,
-      status: task.status,
-      priority: task.priority,
-    }
-  });
-
-}
+  description: "A todo app built with Next.js, Tailwind Css, Shadcn-ui",
+};
 
 export default async function TaskPage() {
-  const tasks = await getTasks()
+  const tasks = await getTasks();
 
   return (
-
-    <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+    <div className="h-full flex-1 flex-col space-y-8 p-8">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
@@ -41,7 +22,7 @@ export default async function TaskPage() {
           </p>
         </div>
       </div>
-      <DataTable data={tasks} columns={columns}/>
+      <DataTable data={tasks} columns={columns} />
     </div>
-  )
+  );
 }
