@@ -2,7 +2,6 @@ import { Metadata } from "next";
 
 import { columns } from "@/components/Columns";
 import { DataTable } from "@/components/DataTable";
-import { getTasks } from "@/utils/task";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -10,7 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default async function TaskPage() {
-  const tasks = await getTasks();
+  const tasks = await fetch("http:localhost:3000/api", {
+    next: { tags: ["tasks"] },
+  }).then((res) => res.json());
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8">

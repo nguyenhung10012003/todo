@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "title": "Task 1",
+    "title": "Todo 1",
     "status": "todo",
     "priority": "low"
   },
@@ -32,6 +32,24 @@
   {
     "id": 6,
     "title": "Task 6",
+    "status": "done",
+    "priority": "high"
+  },
+  {
+    "id": "7",
+    "title": "Task 7",
+    "status": "todo",
+    "priority": "low"
+  },
+  {
+    "id": "8",
+    "title": "Task 8",
+    "status": "inProgress",
+    "priority": "high"
+  },
+  {
+    "id": "9",
+    "title": "Task 9",
     "status": "done",
     "priority": "high"
   }

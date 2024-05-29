@@ -2,6 +2,7 @@
 
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -17,7 +18,7 @@ import {
 
 interface TaskModalProps {
   openBtn: React.ReactNode;
-  handleSave: () => void;
+  saveMethod: "update" | "create";
   title: string;
   description: string;
   task?: {
@@ -30,13 +31,50 @@ interface TaskModalProps {
 
 export default function TaskModal({
   openBtn,
-  handleSave,
+  saveMethod,
   title,
   description,
   task,
 }: TaskModalProps) {
+  const [id, setId] = useState(task?.id ?? "");
+  const [taskTitle, setTaskTitle] = useState(task?.title ?? "");
+  const [status, setStatus] = useState(task?.status ?? "");
+  const [priority, setPriority] = useState(task?.priority ?? "");
+
+  const handleSave = () => {
+    if (saveMethod === "update") {
+      fetch("http://localhost:3000/api", {
+        method: "PUT",
+        body: JSON.stringify({
+          id,
+          title: taskTitle,
+          status,
+          priority,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        res.json();
+      });
+    } else {
+      fetch("http://localhost:3000/api", {
+        method: "POST",
+        body: JSON.stringify({
+          id,
+          title: taskTitle,
+          status,
+          priority,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+    }
+  };
+  // console.log(id, taskTitle, status, priority);
   return (
-    <Dialog.Root modal={true}>
+    <Dialog.Root>
       <Dialog.Trigger asChild>{openBtn}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
@@ -58,6 +96,8 @@ export default function TaskModal({
           <div className="flex flex-col gap-2">
             <Label htmlFor="id">Task Id</Label>
             <Input
+              value={id}
+              onChange={(e) => setId(e.target.value)}
               type="text"
               id="id"
               placeholder="Your task Id"
@@ -67,6 +107,8 @@ export default function TaskModal({
           <div className="flex flex-col gap-2 mt-4">
             <Label htmlFor="title">Task Title</Label>
             <Input
+              value={taskTitle}
+              onChange={(e) => setTaskTitle(e.target.value)}
               type="text"
               id="title"
               placeholder="Your task title here"
@@ -76,7 +118,10 @@ export default function TaskModal({
           <div className=" flex flex-col md:flex-row gap-2 mt-4">
             <div className="flex flex-col gap-2 w-full">
               <Label>Priority</Label>
-              <Select>
+              <Select
+                value={priority}
+                onValueChange={(value) => setPriority(value)}
+              >
                 <SelectTrigger className="w-full border-gray-500">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
@@ -92,7 +137,10 @@ export default function TaskModal({
             </div>
             <div className="flex flex-col gap-2 w-full">
               <Label>Status</Label>
-              <Select>
+              <Select
+                value={status}
+                onValueChange={(value) => setStatus(value)}
+              >
                 <SelectTrigger className="w-full border-gray-500">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>

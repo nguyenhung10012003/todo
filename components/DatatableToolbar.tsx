@@ -12,8 +12,6 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import { DataTableFacetedFilter } from "./DataTableFacedFilter";
 import TaskModal from "./TaskModal";
 
-import { saveTask } from "@/utils/task";
-
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
@@ -66,7 +64,7 @@ export function DataTableToolbar<TData>({
             New task
           </Button>
         }
-        handleSave={saveTask}
+        saveMethod="create"
         title={"Add a task"}
         description={"Create a new task here."}
       />
